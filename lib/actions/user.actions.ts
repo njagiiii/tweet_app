@@ -115,7 +115,7 @@ export async function fetchUsers({
   searchString ?: string;
   pageNumber? : number;
   pageSize ? :number;
-  sortBy?: SortOrder;
+  sortBy?: "asc" | "desc";
 }){
   try{
     connectToDB();
@@ -139,8 +139,11 @@ export async function fetchUsers({
       ];
     }
 
-    // define the sort option based by created at of the sortBy
-    const sortOptions = {createdAt : sortBy}
+    // Define the sort option based on the sortBy parameter
+    const sortOptions: { [key: string]: "asc" | "desc" } = {};
+    if (sortBy === "asc" || sortBy === "desc") {
+      sortOptions.createdAt = sortBy;
+    }
      
     // find user and sort
     const userQuery = User.find(query)
